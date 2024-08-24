@@ -12,7 +12,7 @@ from smartcard.Exceptions import CardConnectionException, NoCardException
 
 BASE_DIR = Path.cwd()
 FILE_NAME = 'card0.txt'
-CARD_BUTTON_KEY = "+"
+CARD_BUTTON_KEY = "c"
 
 def beep():
     if os.name == 'nt':
@@ -24,8 +24,12 @@ def beep():
 
 keyboard = Controller()
 def press_card_button():
-    keyboard.press(CARD_BUTTON_KEY)
-    keyboard.release(CARD_BUTTON_KEY)
+    if os.name == 'nt':
+        import pydirectinput
+        pydirectinput.press('c')
+    else:
+        keyboard.press(CARD_BUTTON_KEY)
+        keyboard.release(CARD_BUTTON_KEY)
 
 def main():
     cardrequest = CardRequest(timeout=None, newcardonly=True)
@@ -48,8 +52,8 @@ def main():
 
             SUCCESS = (0x90, 0x00)
             if (sw1, sw2) == SUCCESS:
-            	# a valid e-amusement ID is a 16-char hex string
-                card_id = hashlib.sha1(bytes(response)).hexdigest()[:16]
+            	# a valid e-amusement ID is a 16-char hex string starting with E00401
+                card_id = "E00401" + hashlib.sha1(bytes(response)).hexdigest()[:10]
                 print("Card found:", card_id)
                 beep()
                 press_card_button()

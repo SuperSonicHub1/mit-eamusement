@@ -58,6 +58,17 @@ files = [
 ]
 
 [[package]]
+name = "pydirectinput"
+version = "1.0.4"
+description = "Python mouse and keyboard input automation for Windows using Direct Input."
+optional = false
+python-versions = ">=3.4"
+files = [
+    {file = "PyDirectInput-1.0.4-py3-none-any.whl", hash = "sha256:238bbe97f505f9c8728a47ea6a787750dbe834ec1fb42b98b3d703d827eda83e"},
+    {file = "PyDirectInput-1.0.4.tar.gz", hash = "sha256:bebe65102c69208688402f9f4cbd2ae7afc174fd2123e156e178b1304e7f80a2"},
+]
+
+[[package]]
 name = "pyinstaller"
 version = "6.10.0"
 description = "PyInstaller bundles a Python application and all its dependencies into a single package."
@@ -308,4 +319,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10, <3.14"
-content-hash = "57e5a674c555e08d5124f167a025d813f610e3cc881e91f7f8d5046963ff6815"
+content-hash = "eba683d66d1269e6eefb4c3b7ebffa285624e56ee40f4ea2982498c2e356b7c0"
