@@ -6,11 +6,13 @@ import hashlib
 import os
 from pathlib import Path
 
+from pynput.keyboard import Key, Controller
 from smartcard.CardRequest import CardRequest
 from smartcard.Exceptions import CardConnectionException, NoCardException
 
 BASE_DIR = Path.cwd()
 FILE_NAME = 'card0.txt'
+CARD_BUTTON_KEY = Key.f20
 
 def beep():
     if os.name == 'nt':
@@ -18,6 +20,12 @@ def beep():
        winsound.Beep(4000, 500)
     else:
        print("\a", end="")
+
+
+keyboard = Controller()
+def press_card_button():
+    keyboard.press(CARD_BUTTON_KEY)
+    keyboard.release(CARD_BUTTON_KEY)
 
 def main():
     cardrequest = CardRequest(timeout=None, newcardonly=True)
@@ -44,9 +52,10 @@ def main():
                 card_id = hashlib.sha1(bytes(response)).hexdigest()[:16]
                 print("Card found:", card_id)
                 beep()
+                press_card_button()
                 with open(BASE_DIR / FILE_NAME, 'w') as f:
                     f.write(card_id)
-        except KeyboardExit:
+        except KeyboardInterrupt:
             pass
         finally:
             card.connection.disconnect()
