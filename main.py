@@ -9,13 +9,38 @@ import os
 from pathlib import Path
 from typing import Generic, TypeVar, List, Tuple
 
-from pydantic import BaseModel, NonNegativeInt
+from pydantic import BaseModel, NonNegativeInt, Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from smartcard.CardRequest import CardRequest
 from smartcard.Exceptions import CardConnectionException, NoCardException
 from websockets.sync.client import connect, ClientConnection
 
-# URI of the SpiceTools API server
-SERVER_URI = "ws://localhost:1338/"
+
+class Settings(BaseSettings):
+    """
+    Configuration for this script.
+    """
+
+    # All settings below can be configured using environment variables,
+    # a `.env` file, or command-line arguments.
+    model_config = SettingsConfigDict(
+        env_file='.env',
+        env_file_encoding='utf-8',
+        env_prefix='sct_',
+        cli_parse_args=True,
+        cli_prog_name='spice-card-tap',
+    )
+
+
+    server_uri: str = Field(
+        default="ws://localhost:1338/",
+        description="URI of the SpiceTools API server"
+    )
+
+    beep: bool = Field(
+        default=True,
+        description="Beep at the user on successful card read"
+    )
 
 
 # A minimal SpiceTools WebSocket client.
@@ -107,8 +132,9 @@ def beep():
        print("\a", end="")
 
 def main():
+    settings = Settings()
     cardrequest = CardRequest(timeout=None, newcardonly=True)
-    client = SpiceToolsClient(SERVER_URI)
+    client = SpiceToolsClient(settings.server_uri)
     while True:
         card = cardrequest.waitforcard()
         try:
@@ -131,7 +157,8 @@ def main():
             	# A valid e-amusement ID is a 16-char hex string starting with E00401
                 card_id = "E00401" + hashlib.sha1(bytes(response)).hexdigest()[:10]
                 print("Card found:", card_id)
-                beep()
+                if settings.beep:
+                    beep()
                 client.card_insert(Card.P1, card_id)
         except KeyboardInterrupt:
             pass
