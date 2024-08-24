@@ -12,7 +12,7 @@ from smartcard.Exceptions import CardConnectionException, NoCardException
 
 BASE_DIR = Path.cwd()
 FILE_NAME = 'card0.txt'
-CARD_BUTTON_KEY = Key.f20
+CARD_BUTTON_KEY = "+"
 
 def beep():
     if os.name == 'nt':
