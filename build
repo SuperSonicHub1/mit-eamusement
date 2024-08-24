@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Builds the card reader into an executable using PyInstaller.
+
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -e
+set -u
+set -o pipefail
+set -x
+
+pyinstaller \
+	--onefile \
+	--noconfirm \
+	main.py
