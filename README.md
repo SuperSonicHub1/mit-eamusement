@@ -1,7 +1,7 @@
-# mit-eamusement
+# spice-card-tap
 
-Reads MIFARE Classic cards (MIT ID cards), and writes their hashed IDs to a text file for homebrew Bemani e-amusement setups.
-For the school's RG@MIT rhythm game club.
+ Reads MIFARE Classic cards (MIT ID cards), and sends their hashed IDs to a Spicetools-compatible server for homebrew Bemani e-amusement setups.
+ For the school's RG@MIT rhythm game club.
 
 ## Installation & Execution
 
